@@ -1,39 +1,34 @@
-import React, { useEffect, useState } from 'react'
-import { Switch, Route } from 'react-router-dom'
-
-
-import axios from 'axios';
+import { createTheme, ThemeProvider } from "@mui/material/styles"
+import AppRouter from "./router/AppRouter"
+import { grey, blueGrey } from "@mui/material/colors"
+import { Provider } from "react-redux"
+import { ToastContainer } from "react-toastify"
+import { PersistGate } from "redux-persist/integration/react"
+import store, { persistor } from "./App/store"
 
 function App() {
-  const [movie, setMovie] = useState([]);
-  const url = `http://www.omdbapi.com/?i=tt3896198&apikey=8a1765d3`;
-
-  useEffect(() => {
-    getData();
-  }, []);
-
-  const getData = async () => {
-    try {
-      const { data } = await axios(url);
-      setMovie(data?.results);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: grey["900"],
+      },
+      secondary: {
+        main: blueGrey["900"],
+      },
+    },
+  })
   return (
-    <div>
-      <div>
-        {movie && (
-          <ul>
-            {movie.map((item) => (
-              <li key={item.id}>{item.title}</li>
-            ))}
-          </ul>
-        )}
-      </div>
-    </div>
-  );
+    <>
+      <ThemeProvider theme={theme}>
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
+            <AppRouter />
+          </PersistGate>
+        </Provider>
+        <ToastContainer />
+      </ThemeProvider>
+    </>
+  )
 }
 
-export default App;
+export default App

@@ -13,7 +13,7 @@ const useAuthCall = () => {
     try {
       const {data}= await axios.post(`${BASE_URL}account/auth/login/` , userInfo)
         dispatch(loginSuccess(data))
-        toastSuccessNotify("Login Performed")
+        toastSuccessNotify("Başarılı Giriş")
         navigate("/stock")
 
     } catch (error) {

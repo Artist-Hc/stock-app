@@ -1,5 +1,5 @@
-import React from 'react'
-import { fetchfail, fetchstart, getsuccess } from '../features/stockSlice'
+
+import { fetchfail, fetchstart, getsuccess,getProCatBrandSuccess } from '../features/stockSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 import { toastErrorNotify, toastSuccessNotify } from '../helpers/toastNotify'
@@ -8,6 +8,7 @@ const useStockCall = () => {
 const dispatch = useDispatch()
 const {token} = useSelector((state)=>state.auth)
 const BASE_URL = "https://12235.fullstack.clarusway.com/"
+
     const getStockData = async (url)=>{
     dispatch(fetchstart())
         try {
@@ -74,19 +75,27 @@ const BASE_URL = "https://12235.fullstack.clarusway.com/"
         }
       
     }
-    // const getProCatBrand =async(url, id)=>{
-    //     try {
-    //        const {data} = await axios.delete(`${BASE_URL}stock/${url}/${id}`,
-    //          {headers :{ Authorization:  `Token ${token}`},})
+    const getProCatBrand = async()=>{
+        try {
+           const [products,categories,brands] = await Promise.all([
+            axios.get(`${BASE_URL}stock/products/`,
+             {headers :{ Authorization:  `Token ${token}`},}),
+             axios.get(`${BASE_URL}stock/categories/`,
+             {headers :{ Authorization:  `Token ${token}`},}),
+             axios.get(`${BASE_URL}stock/brands/`,
+             {headers :{ Authorization:  `Token ${token}`},})
+           ])
+           dispatch(
+            getProCatBrandSuccess([products.data, categories?.data, brands?.data]))
 
-    //          getStockData(url)
-
-    //     } catch (error) {
-    //         dispatch(fetchfail())
+        } catch (error) {
+            console.log(error)
+            dispatch(fetchfail())
+            toastErrorNotify(`Data can not be fetched`)
             
-    //     }
+        }
       
-    // }
+    }
 
 
 
@@ -97,6 +106,7 @@ const BASE_URL = "https://12235.fullstack.clarusway.com/"
     postStockData,
     putStockData,
     deleteStockData,
+    getProCatBrand,
 }
 }
 

@@ -19,7 +19,7 @@ const icons = [
     url: "/stock/",
   },
   {
-    title: "Purchase",
+    title: "Purchases",
     icon: <ShoppingCartIcon />,
     url: "/stock/purchases/",
   },

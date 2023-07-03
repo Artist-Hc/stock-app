@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useDispatch } from 'react-redux'
-import { fetchFail, fetchStart, loginSuccess, registerSuccess } from '../features/authSlice'
+import { fetchFail, fetchStart, loginSuccess, logoutSuccess, registerSuccess } from '../features/authSlice'
 import { toastErrorNotify, toastSuccessNotify } from '../helpers/toastNotify'
 import { useNavigate } from 'react-router-dom'
 
@@ -35,11 +35,11 @@ const useAuthCall = () => {
  }
   
 }
-const logout = async(userInfo)=>{
+const logout = async()=>{
   dispatch(fetchStart())
 try {
- const {data}= await axios.post(`${BASE_URL}account/auth/logout/` , userInfo)
-   dispatch(registerSuccess(data))
+ const {data}= await axios.post(`${BASE_URL}account/auth/logout/`)
+   dispatch(logoutSuccess())
    toastSuccessNotify("çıkış yapıldı")
    navigate("/")
 
